@@ -1,0 +1,65 @@
+@import "../../resources/cores/mixins";
+
+.c-info {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    .c-tooltip {
+        font-family: inherit;
+        opacity: 0;
+        transform: scale(0);
+        position: absolute;
+        bottom: 110%;
+        left: 0%;
+        display: flex;
+        white-space: nowrap;
+        font-size: 13px;
+        border-radius: 8px;
+        padding: 4px 6px;
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+    }
+
+    &:hover {
+        .c-tooltip {
+            opacity: 1;
+            transform: scale(1);
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+    }
+}
+
+@include md {
+    .course-item {
+        &__info {
+            display: flex;
+            flex-direction: column;
+            .info-left {
+                width: 100%;
+                padding: 0 8px;
+                justify-content: space-between;
+                margin: 4px 0;
+            }
+
+            .info-right {
+                width: 100%;
+                text-align: center;
+                margin: 4px 0;
+            }
+        }
+
+        .see-more {
+            margin-top: 0;
+        }
+    }
+
+    .course-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@include sm {
+    .course-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}

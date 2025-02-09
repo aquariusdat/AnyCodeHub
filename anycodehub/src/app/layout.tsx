@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import "./globals.css";
-import { manRopeSans } from "@/utils/fonts";
+import "./globals.scss";
+import { manrope } from "@/utils/fonts";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
-  title: "AnycodeHub",
+  title: "AnyCodeHub",
   description: "Nền tảng học lập trình trực tuyến",
 };
 
@@ -13,12 +14,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${manRopeSans.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <>
+      <ClerkProvider>
+        <html lang="en">
+          <body className={`${manrope.variable} font-primary antialiased`}>
+            {children}
+          </body>
+        </html>
+      </ClerkProvider>
+    </>
   );
 }

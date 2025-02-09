@@ -1,8 +1,14 @@
-import { Manrope } from "next/font/google";
+import { Manrope, Roboto } from "next/font/google";
 
-const manRopeSans = Manrope({
+const manrope = Manrope({
     variable: "--font-manrope",
     subsets: ["latin"],
 });
 
-export { manRopeSans };
+const roboto = Roboto({
+    subsets: ["latin"],
+    weight: ["400", "500", "700"],
+    variable: "--font-roboto",
+});
+
+export { manrope, roboto };
