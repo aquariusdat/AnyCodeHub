@@ -4,10 +4,11 @@ import logo from "../../../public/images/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
+import { DarkModeToggle } from "../common";
 
 const Sidebar = () => {
     return (
-        <aside className="sidebar p-5 border-r-gray-200 border-2 border-solid bg-white flex flex-col">
+        <aside className="sidebar p-5 border-r-gray-200 border-2 border-solid dark:bg-grayDarker bg-white flex flex-col">
             <Link className="sidebar-logo font-bold text-3xl flex items-center gap-3 mb-4" style={{ height: "50px" }} href="/">
                 <div className="image rounded-full bg-primary size-12 p-1.5" >
                     <Image
@@ -32,6 +33,7 @@ const Sidebar = () => {
             </ul>
 
             <div className="flex justify-center mt-10">
+                <DarkModeToggle></DarkModeToggle>
                 <UserButton />
             </div>
         </aside>

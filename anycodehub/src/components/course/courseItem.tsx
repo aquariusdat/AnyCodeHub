@@ -7,7 +7,7 @@ import CourseInfo from "./courseInfo"
 
 const CourseItem = () => {
     return (
-        <div className="course-item bg-white border border-gray-200 p-5 rounded-lg">
+        <div className="course-item dark:bg-grayDarker bg-white border border-gray-200 p-5 rounded-lg">
             <Link className="block h-[180px] relative overflow-hidden rounded-lg" href={`/courses/1`}>
                 <Image src={`https://images.unsplash.com/photo-1738830656378-c8f96e01ec50?q=80&w=2701&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`} alt=""
                     width={300}
