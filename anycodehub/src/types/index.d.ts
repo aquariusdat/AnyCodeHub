@@ -18,12 +18,6 @@ type CourseInfoProps = {
     courseInfoIcon?: React.ReactNode;
 }
 
-type CreateUserParams = {
-    clerkId: string;
-    userName:string;
-    emailAddress:string;
-    name?:string;
-    avatar?:string;
-};
 
-export type { MenuItemProp, ActiveLinkProp, CourseInfoProps, CreateUserParams};
+
+export type { MenuItemProp, ActiveLinkProp, CourseInfoProps};

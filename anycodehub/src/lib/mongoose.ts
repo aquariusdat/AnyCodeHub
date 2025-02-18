@@ -9,7 +9,7 @@ export const connectToDatabase = async () => {
         validConnect();
         if (isConnected) return;
 
-        await moongose.connect(process.env.MONGDB_CONNECTIONSTRING, {
+        await moongose.connect(process.env.MONGDB_CONNECTIONSTRING || '', {
             // useNewUrlParser: true,
             // useUnifiedTopology: true,
             // useFindAndModify: false,
