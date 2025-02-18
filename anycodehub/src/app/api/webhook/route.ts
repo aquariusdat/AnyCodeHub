@@ -1,4 +1,4 @@
-import { WebhookEvent, WebhookEventType } from "@clerk/nextjs/server";
+import { WebhookEvent } from "@clerk/nextjs/server";
 import { Webhook } from "svix";
 
 // const webhookSecret: string = process.env.WEBHOOK_SECRET || "whsec_uR0gzc7iMzuH3zQrqNw3fGGBmPBXcNRS";
