@@ -1,25 +1,30 @@
-enum EUserStatus{
+enum EUserStatus {
     ACTIVE = 'ACTIVE',
     INACTIVE = 'INACTIVE',
     BLOCKED = 'BLOCKED'
 }
 
-enum EUserRole{
+enum EUserRole {
     ADMIN = 'ADMIN',
     GUEST = 'GUEST',
     MODERATOR = 'MODERATOR',
 }
 
-enum ECourseStatus{
+enum ECourseStatus {
     APPROVED = 'APPROVED',
     PENDING = 'PENDING',
     REJECTED = 'REJECTED'
 }
 
-enum ECourseLevel{
+enum ECourseLevel {
     BEGINNER = 'BEGINNER',
     INTERMEDIATE = 'INTERMEDIATE',
     ADVANCED = 'ADVANCED'
 }
 
-export {EUserStatus, EUserRole, ECourseStatus, ECourseLevel};
+enum ELessonType {
+    VIDEO = "VIDEO",
+    TEXT = "TEXT"
+}
+
+export { EUserStatus, EUserRole, ECourseStatus, ECourseLevel, ELessonType };
