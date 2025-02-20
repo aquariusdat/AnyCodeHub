@@ -1,23 +1,7 @@
 import { ELessonType } from "@/types/enums";
 import { model, models, Schema } from "mongoose";
 
-interface ILesson extends Document {
-    _id: string;
-    title: string;
-    slug: string;
-    section: Schema.Types.ObjectId;
-    course: Schema.Types.ObjectId;
-    orderIndex: number;
-    durationTime: number;
-    videoUrl: string;
-    content: string;
-    type: ELessonType;
-    createdAt: Date;
-    createdBy: Schema.Types.ObjectId;
-    isDeleted: boolean;
-    deletedAt: Date;
-    deletedBy: Schema.Types.ObjectId;
-}
+
 
 const lessonSchema = new Schema<ILesson>({
     title: { type: String, required: true },

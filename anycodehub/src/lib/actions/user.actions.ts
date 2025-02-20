@@ -2,19 +2,29 @@
 
 import User from "@/databases/user.model";
 import { connectToDatabase } from "../mongoose";
-import { CreateUserParams } from "@/types/params";
-
-export default async function createUser(user: CreateUserParams) : Promise<CreateUserParams | undefined>{
-    try{
-        connectToDatabase();
+import { CreateUserParams, GetUserInfoParams } from "@/types/params";
+export async function createUser(user: CreateUserParams): Promise<CreateUserParams | undefined> {
+    try {
+        await connectToDatabase();
         const userAdded = await User.create(user);
         return userAdded;
     }
-    catch(err){
+    catch (err) {
         console.error(err);
 
     }
-    finally{
+    finally {
 
+    }
+}
+
+export async function getUserInfo(user: GetUserInfoParams): Promise<IUser | undefined> {
+    try {
+        await connectToDatabase();
+        const userFiltered = await User.findOne({ clerkId: user.userId });
+        return userFiltered;
+    }
+    catch (err) {
+        console.error(err);
     }
 }

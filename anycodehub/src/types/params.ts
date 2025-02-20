@@ -1,9 +1,13 @@
 type CreateUserParams = {
     clerkId: string;
-    userName:string;
-    emailAddress:string;
-    name?:string;
-    avatar?:string;
+    userName: string;
+    emailAddress: string;
+    name?: string;
+    avatar?: string;
 };
 
-export type {CreateUserParams};
+type GetUserInfoParams = {
+    userId: string;
+}
+
+export type { CreateUserParams, GetUserInfoParams };

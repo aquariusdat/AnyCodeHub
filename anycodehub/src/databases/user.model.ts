@@ -1,22 +1,7 @@
 import { EUserRole, EUserStatus } from "@/types/enums";
 import { model, models, Schema } from "mongoose";
 
-interface IUser extends Document {
-    clerkId: string;
-    name: string;
-    userName: string;
-    emailAddress: string;
-    avatar: string;
-    createdAt: Date;
-    createdBy: string;
-    status: EUserStatus;
-    role: EUserRole;
-    isActive: boolean;
-    isDeleted: boolean;
-    deletedAt: Date;
-    deletedBy: string;
-    courses: Schema.Types.ObjectId[];
-}
+
 
 const userSchema = new Schema<IUser>({
     clerkId: { type: String },

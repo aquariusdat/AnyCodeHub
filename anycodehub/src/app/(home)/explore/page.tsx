@@ -1,11 +1,11 @@
 import { CourseGrid } from '@/components/common'
 import CourseItem from '@/components/course/courseItem'
 import Heading from '@/components/typoraphy/heading'
-import createUser from '@/lib/actions/user.actions'
+import { createUser } from '@/lib/actions/user.actions'
 import React from 'react'
 
 const Explore = async () => {
-    const user  = await createUser({
+    const user = await createUser({
         clerkId: 'clertId_1',
         emailAddress: 'tondat.dev@gmail.com',
         userName: 'tondat.dev',

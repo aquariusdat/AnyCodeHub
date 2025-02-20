@@ -1,17 +1,6 @@
 import { model, models, Schema } from "mongoose";
 
-interface ISection extends Document {
-    _id: string;
-    title: string;
-    course: Schema.Types.ObjectId;
-    lessons: Schema.Types.ObjectId[];
-    orderIndex: number;
-    createdAt: Date;
-    createdBy: Schema.Types.ObjectId;
-    isDeleted: boolean;
-    deletedAt: Date;
-    deletedBy: Schema.Types.ObjectId;
-}
+
 
 const sectionSchema = new Schema<ISection>({
     title: { type: String, required: true },
