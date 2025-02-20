@@ -10,4 +10,16 @@ enum EUserRole{
     MODERATOR = 'MODERATOR',
 }
 
-export {EUserStatus, EUserRole};
+enum ECourseStatus{
+    APPROVED = 'APPROVED',
+    PENDING = 'PENDING',
+    REJECTED = 'REJECTED'
+}
+
+enum ECourseLevel{
+    BEGINNER = 'BEGINNER',
+    INTERMEDIATE = 'INTERMEDIATE',
+    ADVANCED = 'ADVANCED'
+}
+
+export {EUserStatus, EUserRole, ECourseStatus, ECourseLevel};
