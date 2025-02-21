@@ -4,6 +4,8 @@ type CreateUserParams = {
     emailAddress: string;
     name?: string;
     avatar?: string;
+    status?: string;
+    role?: string;
 };
 
 type GetUserInfoParams = {

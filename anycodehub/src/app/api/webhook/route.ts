@@ -1,3 +1,5 @@
+import { createUser } from "@/lib/actions/user.actions";
+import { EUserRole, EUserStatus } from "@/types/enums";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { Webhook } from "svix";
 
@@ -6,7 +8,7 @@ import { Webhook } from "svix";
 export async function POST(req: Request) {
     if (!process.env.WEBHOOK_SECRET) throw new Error(`Webhook secret is not defined`);
 
-    const webhookSecret:string = process.env.WEBHOOK_SECRET;
+    const webhookSecret: string = process.env.WEBHOOK_SECRET;
 
     const svix_id = req.headers.get("svix-id") ?? "";
     const svix_timestamp = req.headers.get("svix-timestamp") ?? "";
@@ -17,7 +19,7 @@ export async function POST(req: Request) {
 
     const sivx = new Webhook(webhookSecret);
 
-    let msg : WebhookEvent;
+    let msg: WebhookEvent;
 
     try {
         msg = sivx.verify(body, {
@@ -31,9 +33,17 @@ export async function POST(req: Request) {
 
     const eventType = msg.type;
     console.log(msg);
-    switch(eventType){
+    switch (eventType) {
         case 'user.created':
             console.log(`User created: ${msg.data}`);
+            createUser({
+                clerkId: msg.data.id,
+                emailAddress: msg.data.email_addresses[0].email_address,
+                userName: msg.data.email_addresses[0].email_address,
+                avatar: msg.data.image_url,
+                status: EUserStatus.ACTIVE,
+                role: msg.data.email_addresses[0].email_address === 'tondat.dev' ? EUserRole.ADMIN : EUserRole.GUEST
+            });
             break;
         case 'user.updated':
             console.log(`User updated: ${msg.data}`);

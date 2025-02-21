@@ -5,13 +5,13 @@ import { createUser } from '@/lib/actions/user.actions'
 import React from 'react'
 
 const Explore = async () => {
-    const user = await createUser({
-        clerkId: 'clertId_1',
-        emailAddress: 'tondat.dev@gmail.com',
-        userName: 'tondat.dev',
-    });
+    // const user = await createUser({
+    //     clerkId: 'clertId_1',
+    //     emailAddress: 'tondat.dev@gmail.com',
+    //     userName: 'tondat.dev',
+    // });
 
-    console.log(user);
+    // console.log(user);
 
     return (
         <div className='explore'>
