@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     switch (eventType) {
         case 'user.created':
             console.log(`User created: ${msg.data}`);
-            createUser({
+            await createUser({
                 clerkId: msg.data.id,
                 emailAddress: msg.data.email_addresses[0].email_address,
                 userName: msg.data.email_addresses[0].email_address,

@@ -12,11 +12,10 @@ export async function createUser(user: CreateUserParams): Promise<CreateUserPara
         return userAdded;
     }
     catch (err) {
-        console.error(err);
-
+        console.log(`Error while creating user ${JSON.stringify(err)}`);
     }
     finally {
-
+        console.log(`create user finally`);
     }
 }
 
