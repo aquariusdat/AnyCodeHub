@@ -35,14 +35,13 @@ export async function POST(req: Request) {
     console.log(msg);
     switch (eventType) {
         case 'user.created':
-            console.log(`User created: ${msg.data}`);
             await createUser({
                 clerkId: msg.data.id,
                 emailAddress: msg.data.email_addresses[0].email_address,
                 userName: msg.data.email_addresses[0].email_address,
                 avatar: msg.data.image_url,
                 status: EUserStatus.ACTIVE,
-                role: msg.data.email_addresses[0].email_address === 'tondat.dev' ? EUserRole.ADMIN : EUserRole.GUEST
+                role: msg.data.email_addresses[0].email_address.includes('tondat.dev') ? EUserRole.ADMIN : EUserRole.GUEST
             });
             break;
         case 'user.updated':
