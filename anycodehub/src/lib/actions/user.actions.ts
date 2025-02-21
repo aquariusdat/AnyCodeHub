@@ -34,7 +34,7 @@ export async function updateUser(user: UpdateUserParams): Promise<UpdateUserPara
     try {
         console.log(`Updating user: ${JSON.stringify(user)}`);
         await connectToDatabase();
-        const userUpdated = await User.findByIdAndUpdate({ clerkId: user.clerkId }, user);
+        const userUpdated = await User.findOneAndUpdate({ clerkId: user.clerkId }, user);
         console.log(`User updated: ${JSON.stringify(userUpdated)}`);
         return userUpdated;
     }
@@ -50,7 +50,7 @@ export async function deleteUser(user: DeleteUserParams): Promise<DeleteUserPara
     try {
         console.log(`Deleting user: ${JSON.stringify(user)}`);
         await connectToDatabase();
-        const userDeleted = await User.findByIdAndUpdate({ clerkId: user.clerkId }, user);
+        const userDeleted = await User.findOneAndUpdate({ clerkId: user.clerkId }, user);
         console.log(`User deleted: ${JSON.stringify(userDeleted)}`);
         return userDeleted;
     }
