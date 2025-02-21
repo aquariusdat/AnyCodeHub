@@ -5,8 +5,10 @@ import { connectToDatabase } from "../mongoose";
 import { CreateUserParams, GetUserInfoParams } from "@/types/params";
 export async function createUser(user: CreateUserParams): Promise<CreateUserParams | undefined> {
     try {
+        console.log(`Creating user: ${JSON.stringify(user)}`);
         await connectToDatabase();
         const userAdded = await User.create(user);
+        console.log(`User created: ${JSON.stringify(userAdded)}`);
         return userAdded;
     }
     catch (err) {
