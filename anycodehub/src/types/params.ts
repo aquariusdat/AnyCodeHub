@@ -12,4 +12,20 @@ type GetUserInfoParams = {
     userId: string;
 }
 
-export type { CreateUserParams, GetUserInfoParams };
+type UpdateUserParams = {
+    clerkId: string;
+    userName: string;
+    emailAddress: string;
+    name?: string;
+    avatar?: string;
+    updatedBy: string;
+    updatedAt: Date;
+}
+
+type DeleteUserParams = {
+    clerkId: string;
+    deleteBy: string;
+    deleteAt: Date;
+}
+
+export type { CreateUserParams, GetUserInfoParams, DeleteUserParams, UpdateUserParams };

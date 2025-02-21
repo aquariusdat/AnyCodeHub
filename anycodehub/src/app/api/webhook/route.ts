@@ -1,4 +1,4 @@
-import { createUser } from "@/lib/actions/user.actions";
+import { createUser, deleteUser, updateUser } from "@/lib/actions/user.actions";
 import { EUserRole, EUserStatus } from "@/types/enums";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { Webhook } from "svix";
@@ -41,18 +41,29 @@ export async function POST(req: Request) {
                 userName: msg.data.email_addresses[0].email_address,
                 avatar: msg.data.image_url,
                 status: EUserStatus.ACTIVE,
+                name: `${msg.data.first_name} ${msg.data.last_name}`,
                 role: msg.data.email_addresses[0].email_address.includes('tondat.dev') ? EUserRole.ADMIN : EUserRole.GUEST
             });
             break;
         case 'user.updated':
-            console.log(`User updated: ${msg.data}`);
+            await updateUser({
+                clerkId: msg.data.id,
+                emailAddress: msg.data.email_addresses[0].email_address,
+                userName: msg.data.email_addresses[0].email_address,
+                avatar: msg.data.image_url,
+                name: `${msg.data.first_name} ${msg.data.last_name}`,
+                updatedBy: msg.data.id,
+                updatedAt: new Date()
+            });
             break;
         case 'user.deleted':
-            console.log(`User deleted: ${msg.data}`);
+            await deleteUser({
+                clerkId: msg.data.id || '',
+                deleteBy: msg.data.id || 'ADMIN',
+                deleteAt: new Date()
+            });
             break;
     }
-
-    // Rest
 
     return new Response("OK", { status: 200 });
 }

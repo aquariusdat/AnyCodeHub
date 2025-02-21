@@ -2,7 +2,7 @@
 
 import User from "@/databases/user.model";
 import { connectToDatabase } from "../mongoose";
-import { CreateUserParams, GetUserInfoParams } from "@/types/params";
+import { CreateUserParams, DeleteUserParams, GetUserInfoParams, UpdateUserParams } from "@/types/params";
 export async function createUser(user: CreateUserParams): Promise<CreateUserParams | undefined> {
     try {
         console.log(`Creating user: ${JSON.stringify(user)}`);
@@ -27,5 +27,37 @@ export async function getUserInfo(user: GetUserInfoParams): Promise<IUser | unde
     }
     catch (err) {
         console.error(err);
+    }
+}
+
+export async function updateUser(user: UpdateUserParams): Promise<UpdateUserParams | undefined> {
+    try {
+        console.log(`Updating user: ${JSON.stringify(user)}`);
+        await connectToDatabase();
+        const userUpdated = await User.findByIdAndUpdate({ clerkId: user.clerkId }, user);
+        console.log(`User updated: ${JSON.stringify(userUpdated)}`);
+        return userUpdated;
+    }
+    catch (err) {
+        console.log(`Error while updating user ${JSON.stringify(err)}`);
+    }
+    finally {
+        console.log(`update user finally`);
+    }
+}
+
+export async function deleteUser(user: DeleteUserParams): Promise<DeleteUserParams | undefined> {
+    try {
+        console.log(`Deleting user: ${JSON.stringify(user)}`);
+        await connectToDatabase();
+        const userDeleted = await User.findByIdAndUpdate({ clerkId: user.clerkId }, user);
+        console.log(`User deleted: ${JSON.stringify(userDeleted)}`);
+        return userDeleted;
+    }
+    catch (err) {
+        console.log(`Error while deleting user ${JSON.stringify(err)}`);
+    }
+    finally {
+        console.log(`delete user finally`);
     }
 }
