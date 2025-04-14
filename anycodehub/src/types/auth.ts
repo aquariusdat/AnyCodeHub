@@ -19,6 +19,9 @@ export interface ApiResponse<T> {
     isSuccess: boolean;
     isFailure: boolean;
     error?: ApiError;
+    status?: string;
+    detail?: string;
+    title?: string;
 }
 
 export interface RegisterRequest {

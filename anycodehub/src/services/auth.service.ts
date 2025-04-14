@@ -17,12 +17,7 @@ export const authService = {
             body: JSON.stringify(data)
         });
 
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || 'Registration failed');
-        }
-
-        return response.json();
+        return await response.json();
     },
 
     async login(data: LoginRequest): Promise<LoginResponse> {
@@ -35,11 +30,7 @@ export const authService = {
             body: JSON.stringify(data)
         });
 
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || 'Login failed');
-        }
 
-        return response.json();
+        return await response.json();
     }
 }; 

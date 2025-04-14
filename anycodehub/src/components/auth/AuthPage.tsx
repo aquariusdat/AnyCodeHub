@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { toast } from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 import { authService } from "../../services/auth.service";
 import { parsePhoneNumber } from 'libphonenumber-js';
 import { RegisterRequest, LoginRequest } from '../../types/auth';
@@ -79,12 +79,13 @@ export const AuthPage = () => {
             setIsAnimating(true);
 
             const response = await authService.register(data);
+            console.log(response);
             if (response.isSuccess) {
                 toast.success('Registration successful! Please sign in.');
                 signUpForm.reset();
                 setAuthMode('signin');
             } else {
-                toast.error(response.error?.message || 'Registration failed');
+                toast.error(response.error?.message || response.detail || 'Registration failed');
             }
         } catch {
             toast.error('An error occurred. Please try again.');
@@ -100,12 +101,13 @@ export const AuthPage = () => {
             setIsAnimating(true);
 
             const response = await authService.login(data);
+            console.log(response);
             if (response.isSuccess) {
                 toast.success('Login successful!');
                 toast.success('Đăng nhập thành công!');
                 // TODO: Handle successful login (e.g., redirect to dashboard)
             } else {
-                toast.error(response.error?.message || 'Đăng nhập thất bại');
+                toast.error(response.error?.message || response.detail || 'Đăng nhập thất bại');
             }
         } catch {
             toast.error('Có lỗi xảy ra, vui lòng thử lại');
@@ -137,6 +139,26 @@ export const AuthPage = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+            <Toaster
+                position="bottom-right"
+                toastOptions={{
+                    duration: 3000,
+                    style: {
+                        background: '#333',
+                        color: '#fff',
+                    },
+                    success: {
+                        style: {
+                            background: 'green',
+                        },
+                    },
+                    error: {
+                        style: {
+                            background: 'red',
+                        },
+                    },
+                }}
+            />
             {isLoading && <Loading fullScreen />}
             <div className="w-full max-w-5xl flex flex-col md:flex-row rounded-3xl overflow-hidden shadow-2xl bg-white dark:bg-gray-800 m-4">
                 {/* Form Section */}
