@@ -45,6 +45,9 @@ export type RegisterResponse = ApiResponse<{
 }>;
 
 export type LoginResponse = ApiResponse<{
-    user: User;
-    token: string;
-}>; 
+    accessToken: string;
+    accessTokenExpirationTime: string;
+    refreshToken: string;
+    refreshTokenExpirationTime: string;
+    userInformation: User;
+}>;

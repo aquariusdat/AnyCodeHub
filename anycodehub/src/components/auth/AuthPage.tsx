@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -11,6 +11,7 @@ import { authService } from "../../services/auth.service";
 import { parsePhoneNumber } from 'libphonenumber-js';
 import { RegisterRequest, LoginRequest } from '../../types/auth';
 import { Loading } from '../common/Loading';
+import { authStore } from '../../services/auth.store';
 
 type AuthMode = "signin" | "signup";
 
@@ -61,6 +62,7 @@ const signInSchema = yup.object().shape({
 
 export const AuthPage = () => {
     const searchParams = useSearchParams();
+    const router = useRouter();
     const [authMode, setAuthMode] = useState<AuthMode>("signin");
     const [isLoading, setIsLoading] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
@@ -101,16 +103,19 @@ export const AuthPage = () => {
             setIsAnimating(true);
 
             const response = await authService.login(data);
-            console.log(response);
             if (response.isSuccess) {
+                // Save auth data
+                authStore.setAuth(response);
+
                 toast.success('Login successful!');
-                toast.success('Đăng nhập thành công!');
-                // TODO: Handle successful login (e.g., redirect to dashboard)
+
+                // Redirect to dashboard
+                router.push('/dashboard');
             } else {
-                toast.error(response.error?.message || response.detail || 'Đăng nhập thất bại');
+                toast.error(response.error?.message || response.detail || 'Login failed.');
             }
-        } catch {
-            toast.error('Có lỗi xảy ra, vui lòng thử lại');
+        } catch (error) {
+            toast.error('An error occurred. Please try again.');
         } finally {
             setIsLoading(false);
             setIsAnimating(false);
@@ -142,7 +147,7 @@ export const AuthPage = () => {
             <Toaster
                 position="bottom-right"
                 toastOptions={{
-                    duration: 3000,
+                    duration: 5000,
                     style: {
                         background: '#333',
                         color: '#fff',
