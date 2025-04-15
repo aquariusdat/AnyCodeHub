@@ -42,6 +42,11 @@ class AuthStore {
         this.saveToStorage();
     }
 
+    public updateUserInfo(user: User) {
+        this.user = user;
+        this.saveToStorage();
+    }
+
     public clearAuth() {
         this.user = null;
         localStorage.removeItem('user');

@@ -3,8 +3,6 @@ import MenuItem from "../menuItems";
 import logo from "../../../public/images/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
-import { UserButton } from "@clerk/nextjs";
-import { DarkModeToggle } from "../common";
 
 const Sidebar = () => {
     return (
@@ -31,11 +29,6 @@ const Sidebar = () => {
                     menuItems.map((item, index) => <MenuItem key={index} icon={item.icon} url={item.url} title={item.title} className={item.className} />)
                 }
             </ul>
-
-            <div className="flex justify-center mt-10">
-                <DarkModeToggle></DarkModeToggle>
-                <UserButton />
-            </div>
         </aside>
     );
 }

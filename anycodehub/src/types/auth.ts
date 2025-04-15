@@ -20,8 +20,6 @@ export interface ApiResponse<T> {
     isFailure: boolean;
     error?: ApiError;
     status?: string;
-    detail?: string;
-    title?: string;
 }
 
 export interface RegisterRequest {
@@ -45,6 +43,14 @@ export type RegisterResponse = ApiResponse<{
 }>;
 
 export type LoginResponse = ApiResponse<{
+    accessToken: string;
+    accessTokenExpirationTime: string;
+    refreshToken: string;
+    refreshTokenExpirationTime: string;
+    userInformation: User;
+}>;
+
+export type RefreshTokenResponse = ApiResponse<{
     accessToken: string;
     accessTokenExpirationTime: string;
     refreshToken: string;

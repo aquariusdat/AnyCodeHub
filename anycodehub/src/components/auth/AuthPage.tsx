@@ -72,6 +72,13 @@ export const AuthPage = () => {
         resolver: yupResolver(signInSchema),
     });
     
+    // Check if user is already logged in and redirect to home page
+    useEffect(() => {
+        if (authStore.isAuthenticated()) {
+            router.push('/');
+        }
+    }, [router]);
+    
     const onSignUp = async (data: SignUpFormData) => {
         try {
             setIsLoading(true);
@@ -84,7 +91,7 @@ export const AuthPage = () => {
                 signUpForm.reset();
                 setAuthMode('signin');
             } else {
-                toast.error(response.error?.message || response.detail || 'Registration failed');
+                toast.error(response.error?.message || 'Registration failed');
             }
         } catch {
             toast.error('An error occurred. Please try again.');
@@ -101,15 +108,13 @@ export const AuthPage = () => {
 
             const response = await authService.login(data);
             if (response.isSuccess) {
-                // Save auth data
                 authStore.setAuth(response);
 
                 toast.success('Login successful!');
 
-                // Redirect to dashboard
                 router.push('/');
             } else {
-                toast.error(response.error?.message || response.detail || 'Login failed.');
+                toast.error(response.error?.message || 'Login failed.');
             }
         } catch (error) {
             toast.error('An error occurred. Please try again.');
