@@ -12,10 +12,11 @@ import { RegisterRequest, LoginRequest } from '../../types/auth';
 import { Loading } from '../common/Loading';
 // import { authStore } from '../../services/auth.store';
 import { useAuthStore } from "@/stores/auth.store";
+import { apiService } from "@/services/api.service";
 
 type AuthMode = "signin" | "signup";
 
-interface SignUpFormData extends RegisterRequest {}
+interface SignUpFormData extends RegisterRequest { }
 
 interface SignInFormData extends LoginRequest { }
 
@@ -72,14 +73,14 @@ export const AuthPage = () => {
     const signInForm = useForm<SignInFormData>({
         resolver: yupResolver(signInSchema),
     });
-    
+
     // Check if user is already logged in and redirect to home page
     useEffect(() => {
         if (useAuthStore.getState().isAuthenticated()) {
             router.push('/');
         }
     }, [router]);
-    
+
     const onSignUp = async (data: SignUpFormData) => {
         try {
             setIsLoading(true);
@@ -144,6 +145,17 @@ export const AuthPage = () => {
             }, 50);
         }, 400);
     };
+
+    const handleSignInGoogleOAuth = async () => {
+        const response = await apiService.get<string>('/Auth/SignInGoogleOAuth');
+
+        if (!response || !response.isSuccess) toast.error(response.error?.message || "Registering with Google failed.");
+        window.open(
+            response.value,
+            'googleLogin',
+            'width=500,height=600'
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-grayDarkest dark:to-gray-900 flex items-center justify-center p-0 sm:p-2 md:p-4 relative">
@@ -428,7 +440,7 @@ export const AuthPage = () => {
                                 </div>
 
                                 <div className="mt-4 grid grid-cols-3 gap-2 sm:gap-3">
-                                    <button className="w-full inline-flex justify-center py-2 px-2 sm:px-4 border border-gray-200 dark:border-gray-700 rounded-lg sm:rounded-xl shadow-sm bg-white dark:bg-grayDarkest text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-grayDarker transition-colors duration-300">
+                                    <Link href={{}} onClick={() => { handleSignInGoogleOAuth() }} className="w-full inline-flex justify-center py-2 px-2 sm:px-4 border border-gray-200 dark:border-gray-700 rounded-lg sm:rounded-xl shadow-sm bg-white dark:bg-grayDarkest text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-grayDarker transition-colors duration-300">
                                         <svg
                                             className="h-5 w-5"
                                             fill="currentColor"
@@ -437,7 +449,7 @@ export const AuthPage = () => {
                                         >
                                             <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
                                         </svg>
-                                    </button>
+                                    </Link>
                                     <button className="w-full inline-flex justify-center py-2 px-2 sm:px-4 border border-gray-200 dark:border-gray-700 rounded-lg sm:rounded-xl shadow-sm bg-white dark:bg-grayDarkest text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-grayDarker transition-colors duration-300">
                                         <svg
                                             className="h-5 w-5"
@@ -510,7 +522,7 @@ export const AuthPage = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                             </svg>
                         </div>
-                        
+
                         <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 sm:mb-4">
                             {authMode === "signin" ? "Welcome Back to AnyCodeHub!" : "Start Your Coding Journey"}
                         </h2>
@@ -519,7 +531,7 @@ export const AuthPage = () => {
                                 ? "Access your personalized learning path, coding exercises, and continue building your programming skills."
                                 : "Join thousands of students learning to code. Interactive lessons, live coding sessions, and hands-on projects await you."}
                         </p>
-                        
+
                         <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
                             <div className="bg-white/10 backdrop-blur-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-full flex items-center space-x-2 text-xs sm:text-sm">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -557,7 +569,7 @@ export const AuthPage = () => {
                     {/* Code snippets in background */}
                     <div className="absolute bottom-4 right-4 text-xs font-mono text-white/20 transform rotate-5">
                         <pre className="hidden sm:block">
-{`function learnToCode() {
+                            {`function learnToCode() {
   const skills = [];
   const practice = true;
   
