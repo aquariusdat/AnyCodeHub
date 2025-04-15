@@ -4,12 +4,13 @@ export const menuItems: {
     url: string;
     title: string;
     className?: string;
+    authorized?: boolean;
     icon?: React.ReactNode;
 }[] = [
         {
             url: "/explore",
             title: "Khám phá",
-            icon: <GlobeIcon className="size-5" />
+            icon: <GlobeIcon className="size-5" />,
         },
         {
             url: "/study",
@@ -19,22 +20,26 @@ export const menuItems: {
         {
             url: "/manage/course",
             title: "Quản lý khoá học",
-            icon: <ExploreIcon className="size-5" />
+            icon: <ExploreIcon className="size-5" />,
+            authorized: true,
         },
         {
             url: "/manage/member",
             title: "Quản lý thành viên",
-            icon: <UserIcon className="size-5" />
+            icon: <UserIcon className="size-5" />,
+            authorized: true,
         },
         {
             url: "/manage/order",
             title: "Quản lý đơn hàng",
-            icon: <ShoppingBagIcon className="size-5" />
+            icon: <ShoppingBagIcon className="size-5" />,
+            authorized: true,
         },
         {
             url: "/manage/comment",
             title: "Quản lý bình luận",
-            icon: <CommentIcon className="size-5" />
+            icon: <CommentIcon className="size-5" />,
+            authorized: true,
         },
         {
             url: "/blog",

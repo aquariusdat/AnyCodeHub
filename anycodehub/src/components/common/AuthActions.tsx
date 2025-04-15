@@ -1,30 +1,16 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { DarkModeToggle } from "@/components/common"
 import { LoginButton } from "@/components/common"
 import { UserDropdown } from "@/components/common"
-import { authStore } from "@/services/auth.store"
+import { useAuthStore } from "@/stores/auth.store"
 
 const AuthActions = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  // Sử dụng Zustand store trực tiếp
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated())
   
-  useEffect(() => {
-    // Check authentication status on mount and whenever auth changes
-    const checkAuth = () => {
-      setIsAuthenticated(authStore.isAuthenticated())
-    }
-    
-    // Initial check
-    checkAuth()
-    
-    // Setup listener for auth changes
-    window.addEventListener("storage", checkAuth)
-    
-    return () => {
-      window.removeEventListener("storage", checkAuth)
-    }
-  }, [])
+  // Subscribe để đảm bảo component được render lại khi auth state thay đổi
+  useAuthStore((state) => state.user)
 
   return (
     <div className="flex items-center gap-2">

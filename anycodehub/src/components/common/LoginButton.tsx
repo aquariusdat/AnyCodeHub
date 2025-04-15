@@ -8,6 +8,7 @@ const LoginButton = () => {
   const router = useRouter()
   
   const handleLogin = () => {
+    console.log('aa');
     router.push("/auth")
   }
 

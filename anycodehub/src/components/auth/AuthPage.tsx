@@ -10,7 +10,8 @@ import { toast, Toaster } from "react-hot-toast";
 import { authService } from "../../services/auth.service";
 import { RegisterRequest, LoginRequest } from '../../types/auth';
 import { Loading } from '../common/Loading';
-import { authStore } from '../../services/auth.store';
+// import { authStore } from '../../services/auth.store';
+import { useAuthStore } from "@/stores/auth.store";
 
 type AuthMode = "signin" | "signup";
 
@@ -74,7 +75,7 @@ export const AuthPage = () => {
     
     // Check if user is already logged in and redirect to home page
     useEffect(() => {
-        if (authStore.isAuthenticated()) {
+        if (useAuthStore.getState().isAuthenticated()) {
             router.push('/');
         }
     }, [router]);
@@ -108,7 +109,7 @@ export const AuthPage = () => {
 
             const response = await authService.login(data);
             if (response.isSuccess) {
-                authStore.setAuth(response);
+                useAuthStore.getState().setAuth(response);
 
                 toast.success('Login successful!');
 

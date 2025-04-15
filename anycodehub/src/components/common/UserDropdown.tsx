@@ -10,12 +10,11 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { LogOut, User, Settings } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { authStore } from "@/services/auth.store"
-import { authService } from "@/services/auth.service"
+import { useAuthStore } from "@/stores/auth.store"
 
 const UserDropdown = () => {
   const router = useRouter()
-  const user = authStore.getUser()
+  const user = useAuthStore((state) => state.getUser())
   
   // Get initials from user's first and last name
   const getInitials = () => {
@@ -24,8 +23,8 @@ const UserDropdown = () => {
   }
   
   const handleLogout = async () => {
-    await authService.logout()
-    router.push("/auth")
+    // Thực hiện logout nhưng không tự chuyển trang
+    await useAuthStore.getState().clearAuth()
   }
   
   const handleProfile = () => {

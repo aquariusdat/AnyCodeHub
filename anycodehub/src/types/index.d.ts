@@ -5,6 +5,7 @@ type MenuItemProp = {
     title: string;
     className?: string;
     icon?: React.ReactNode;
+    collapsed?: boolean;
 }
 
 type ActiveLinkProp = {

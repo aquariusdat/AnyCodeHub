@@ -1,3 +1,8 @@
+// This webhook handler was previously used with Clerk authentication
+// It needs to be replaced with a custom implementation for your auth system
+// Below is the previous Clerk implementation for reference
+
+/*
 import { createUser, deleteUser, updateUser } from "@/lib/actions/user.actions";
 import { EUserRole, EUserStatus } from "@/types/enums";
 import { WebhookEvent } from "@clerk/nextjs/server";
@@ -66,4 +71,13 @@ export async function POST(req: Request) {
     }
 
     return new Response("OK", { status: 200 });
+}
+*/
+
+// New implementation for custom auth system
+export async function POST(req: Request) {
+    // Implement your custom webhook handler here
+    // This should handle user events from your auth system
+    
+    return new Response("Not implemented yet", { status: 501 });
 }

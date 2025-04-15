@@ -29,21 +29,48 @@ export function middleware(request: NextRequest) {
     pathname === path || pathname.startsWith(`${path}/`)
   )
   
-  // Get the authentication cookie status
-  const hasAccessToken = request.cookies.has('X-ACCESS-TOKEN')
+  // Get the authentication token from cookies
+  const accessToken = request.cookies.get('X-ACCESS-TOKEN')
   
-  // For auth paths, redirect to home if already logged in
-  if (isAuthPath && hasAccessToken) {
+  // Kiểm tra xem token có tồn tại và còn hiệu lực không
+  const hasValidToken = !!accessToken && !isTokenExpired(accessToken.value)
+  
+  // For auth paths, redirect to home if already logged in with valid token
+  if (isAuthPath && hasValidToken) {
     return NextResponse.redirect(new URL('/', request.url))
   }
   
-  // For protected paths, redirect to login if not logged in
-  if (isProtectedPath && !hasAccessToken) {
+  // For protected paths, redirect to login if not logged in or token invalid
+  if (isProtectedPath && !hasValidToken) {
     return NextResponse.redirect(new URL('/auth', request.url))
   }
   
   // Continue to the requested page
   return NextResponse.next()
+}
+
+// Hàm kiểm tra token đã hết hạn chưa
+function isTokenExpired(token: string): boolean {
+  try {
+    // JWT có 3 phần: header, payload, signature, phân cách bởi dấu .
+    const payload = token.split('.')[1]
+    if (!payload) return true
+    
+    // Giải mã phần payload từ base64
+    const decoded = JSON.parse(Buffer.from(payload, 'base64').toString())
+    
+    // Lấy thời gian hết hạn (exp) từ payload, đơn vị là timestamp (giây)
+    const exp = decoded.exp
+    if (!exp) return true
+    
+    // So sánh với thời gian hiện tại (đơn vị millisecond)
+    const currentTime = Math.floor(Date.now() / 1000)
+    
+    return currentTime >= exp
+  } catch (error) {
+    console.error('Error checking token expiry:', error)
+    return true // Nếu có lỗi, coi như token đã hết hạn
+  }
 }
 
 export const config = {
