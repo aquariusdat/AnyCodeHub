@@ -1,13 +1,13 @@
 import CourseAddNew from "@/components/course/courseAddNew";
 import Heading from "@/components/typoraphy/heading";
 
-const CreateCourse = () => {
+const CreateCoursePage = () => {
     return (
-        <div>
+        <div className="container mx-auto py-10">
             <Heading>Tạo khóa học mới</Heading>
-            <CourseAddNew></CourseAddNew>
+            <CourseAddNew />
         </div>
     )
 }
 
-export default CreateCourse;
+export default CreateCoursePage;
