@@ -1,4 +1,4 @@
-import { authStore } from './auth.store';
+import { useAuthStore} from '@/stores/auth.store';
 import { ApiResponse } from '../types/auth';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -51,7 +51,7 @@ class ApiService {
 
             if (!response.ok) {
                 // If refresh token request fails, clear auth and redirect to login
-                authStore.clearAuth();
+                useAuthStore.getState().clearAuth();
 
                 // If we're in a browser environment
                 if (typeof window !== 'undefined') {
@@ -64,16 +64,13 @@ class ApiService {
 
             const refreshResponse = await response.json();
             if (refreshResponse.isSuccess) {
-                // Update the stored user info (cookies are automatically set by the backend)
-                authStore.updateUserInfo(refreshResponse.value.userInformation);
-
                 // Process all queued requests with the new token
                 processQueue('success');
                 isRefreshing = false;
                 return true;
             }
 
-            authStore.clearAuth();
+            useAuthStore.getState().clearAuth();
 
             // If we're in a browser environment
             if (typeof window !== 'undefined') {
@@ -84,7 +81,7 @@ class ApiService {
             return false;
         } catch (error) {
             console.error('Error refreshing token:', error);
-            authStore.clearAuth();
+            useAuthStore.getState().clearAuth();
 
             // If we're in a browser environment
             if (typeof window !== 'undefined') {
@@ -124,7 +121,7 @@ class ApiService {
             let response = await fetch(`${API_BASE_URL}${url}`, requestOptions);
 
             // If response is 401 (Unauthorized) and we're not already refreshing and not a skip auth request
-            if (response.status === 401 && !skipAuth && authStore.isAuthenticated()) {
+            if (response.status === 401 && !skipAuth && useAuthStore.getState().isAuthenticated()) {
                 // Try to refresh the token
                 const refreshSuccess = await this.refreshToken();
 

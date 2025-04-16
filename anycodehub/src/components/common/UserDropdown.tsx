@@ -11,13 +11,16 @@ import {
 import { LogOut, User, Settings } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useAuthStore } from "@/stores/auth.store"
+import { useMemo } from "react"
 
 const UserDropdown = () => {
   const router = useRouter()
-  const user = useAuthStore((state) => state.getUser())
+  const getUser = useAuthStore((state) => state.getUser);
+  const user = useMemo(() => getUser(), [getUser]);
   
   // Get initials from user's first and last name
   const getInitials = () => {
+    debugger;
     if (!user) return "?"
     return `${user.firstName?.[0] || ""}${user.lastName?.[0] || ""}`.toUpperCase()
   }
