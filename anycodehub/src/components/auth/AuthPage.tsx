@@ -147,15 +147,50 @@ export const AuthPage = () => {
     };
 
     const handleSignInGoogleOAuth = async () => {
-        const response = await apiService.get<string>('/Auth/SignInGoogleOAuth');
+        try {
+            setIsLoading(true);
+            const response = await apiService.get<string>('/Auth/SignInGoogleOAuth');
 
-        if (!response || !response.isSuccess) toast.error(response.error?.message || "Registering with Google failed.");
-        window.open(
-            response.value,
-            'googleLogin',
-            'width=500,height=600'
-        );
-    }
+            if (!response || !response.isSuccess) {
+                toast.error(response.error?.message || "Google authentication failed");
+                return;
+            }
+
+            // Mở popup
+            const popup = window.open(
+                response.value,
+                'googleLogin',
+                'width=500,height=600'
+            );
+
+            // Kiểm tra khi popup đóng
+            const checkPopupClosed = setInterval(() => {
+                if (!popup || popup.closed) {
+                    clearInterval(checkPopupClosed);
+
+                    // Khi popup đóng, gọi API kiểm tra trạng thái đăng nhập
+                    checkAuthStatusAfterRedirect();
+
+                    setIsLoading(false);
+                }
+            }, 500);
+
+        } catch (error) {
+            toast.error('An error occurred during authentication');
+            setIsLoading(false);
+        }
+    };
+
+    // Hàm kiểm tra trạng thái đăng nhập sau khi popup đóng
+    const checkAuthStatusAfterRedirect = async () => {
+        try {
+            useAuthStore.getState().setAuth(); // Không truyền tham số vì lỗi bên dưới
+            toast.success('Google login successful!');
+            router.push('/');
+        } catch (error) {
+            toast.error('Failed to verify authentication status');
+        }
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-grayDarkest dark:to-gray-900 flex items-center justify-center p-0 sm:p-2 md:p-4 relative">

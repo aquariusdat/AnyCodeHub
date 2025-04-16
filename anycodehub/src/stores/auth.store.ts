@@ -16,7 +16,7 @@ interface AuthState {
   isAuthenticated: () => boolean;
 
   // Actions
-  setAuth: (loginResponse: LoginResponse) => Promise<void>;
+  setAuth: () => Promise<void>;
   clearAuth: () => Promise<void>;
   getUser: () => User | null;
 }
@@ -32,7 +32,7 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: () => !!Cookies.get(USER_COOKIE_NAME),
 
       // Action để set thông tin auth khi đăng nhập
-      setAuth: async (loginResponse: LoginResponse) => {
+      setAuth: async () => {
         // const user = loginResponse.value.userInformation;
 
         // // Lưu thông tin user vào cookie cho UI
