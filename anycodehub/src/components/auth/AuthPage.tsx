@@ -184,9 +184,15 @@ export const AuthPage = () => {
     // Hàm kiểm tra trạng thái đăng nhập sau khi popup đóng
     const checkAuthStatusAfterRedirect = async () => {
         try {
-            useAuthStore.getState().setAuth(); // Không truyền tham số vì lỗi bên dưới
+            const authResult = await useAuthStore.getState().setAuth(); 
             toast.success('Google login successful!');
-            router.push('/');
+            
+            // Check if it's a new Google account or requires password change
+            if (authResult?.isGoogleAccount && !authResult?.hasSetPassword) {
+                router.push('/account/change-password');
+            } else {
+                router.push('/');
+            }
         } catch (error) {
             toast.error('Failed to verify authentication status');
         }

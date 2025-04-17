@@ -66,34 +66,36 @@ const courseFormSchema = z.object({
   level: z.coerce.number().pipe(z.nativeEnum(CourseLevel)).default(CourseLevel.Beginner),
   totalDuration: z.coerce.number().min(0, { message: "Thời lượng không thể âm." }).optional(),
   benefits: z.array(z.object({
-    value: z.string().min(1, { message: "Lợi ích không được để trống." })
+    description: z.string().min(1, { message: "Lợi ích không được để trống." })
   })).optional(),
   technologies: z.array(z.object({
-    name: z.string().min(1, { message: "Tên công nghệ không được để trống." }),
-    description: z.string().optional()
+    technologyId: z.string().optional(),
+    name: z.string().min(1, { message: "Tên công nghệ không được để trống." }).optional()
   })).optional(),
   categories: z.array(z.object({
-    name: z.string().min(1, { message: "Tên danh mục không được để trống." })
+    categoryId: z.string().optional(),
+    name: z.string().min(1, { message: "Tên danh mục không được để trống." }).optional()
   })).optional(),
-  requirements: z.array(z.object({
-    value: z.string().min(1, { message: "Yêu cầu không được để trống." })
-  })).optional(),
-  qa: z.array(z.object({
+  qAs: z.array(z.object({
     question: z.string().min(1, { message: "Câu hỏi không được để trống." }),
     answer: z.string().min(1, { message: "Câu trả lời không được để trống." })
   })).optional(),
+  requirements: z.array(z.object({
+    description: z.string().min(1, { message: "Yêu cầu không được để trống." })
+  })).optional(),
   sections: z.array(z.object({
-    title: z.string().min(1, { message: "Tiêu đề phần không được để trống." }),
+    name: z.string().min(1, { message: "Tên chương không được để trống." }),
     lessons: z.array(z.object({
       title: z.string().min(1, { message: "Tiêu đề bài học không được để trống." }),
+      description: z.string().optional(),
+      duration: z.coerce.number().min(0).optional(),
       videoUrl: z.string().url({ message: "URL video không hợp lệ." }).optional().or(z.literal('')),
-      content: z.string().optional(),
-      durationTime: z.coerce.number().min(0).optional()
+      attachmentUrl: z.string().optional()
     })).optional()
   })).optional(),
 }).refine(data => !data.salePrice || data.salePrice <= data.price, {
     message: "Giá khuyến mãi không được lớn hơn giá gốc.",
-    path: ["salePrice"], // Chỉ định lỗi này thuộc về trường salePrice
+    path: ["salePrice"],
 });
 
 type CourseFormValues = z.infer<typeof courseFormSchema>;
@@ -117,14 +119,14 @@ const CourseAddNewEnhanced = () => {
       status: CourseStatus.Draft,
       level: CourseLevel.Beginner,
       totalDuration: 0,
-      benefits: [{ value: '' }],
-      technologies: [{ name: '', description: '' }],
-      categories: [{ name: '' }],
-      requirements: [{ value: '' }],
-      qa: [{ question: '', answer: '' }],
-      sections: [{ title: '', lessons: [{ title: '', videoUrl: '', content: '', durationTime: 0 }] }],
+      benefits: [{ description: '' }],
+      technologies: [{ technologyId: '', name: '' }],
+      categories: [{ categoryId: '', name: '' }],
+      requirements: [{ description: '' }],
+      qAs: [{ question: '', answer: '' }],
+      sections: [{ name: '', lessons: [{ title: '', description: '', duration: 0, videoUrl: '', attachmentUrl: '' }] }],
     },
-    mode: 'onChange', // Validate khi có thay đổi
+    mode: 'onChange',
   });
 
   // Field arrays cho các danh sách
@@ -150,7 +152,7 @@ const CourseAddNewEnhanced = () => {
 
   const qaArray = useFieldArray({
     control: form.control,
-    name: "qa",
+    name: "qAs",
   });
 
   const sectionsArray = useFieldArray({
@@ -169,12 +171,38 @@ const CourseAddNewEnhanced = () => {
             ...data,
             authorId: user.id,
             createdBy: user.id,
-            // Các trường mặc định khác nếu API yêu cầu và không có trong form
             totalViews: 0,
             rating: 0,
+            benefits: data.benefits?.map(benefit => ({
+                ...benefit,
+                createdBy: user.id
+            })),
+            technologies: data.technologies?.map(tech => ({
+                ...tech,
+                createdBy: user.id
+            })),
+            categories: data.categories?.map(category => ({
+                ...category,
+                createdBy: user.id
+            })),
+            qAs: data.qAs?.map(qa => ({
+                ...qa,
+                createdBy: user.id
+            })),
+            requirements: data.requirements?.map(req => ({
+                ...req,
+                createdBy: user.id
+            })),
+            sections: data.sections?.map(section => ({
+                ...section,
+                lessons: section.lessons?.map(lesson => ({
+                    ...lesson,
+                    createdBy: user.id
+                }))
+            }))
         };
 
-      const response = await apiService.post('/Course/Create', courseData, {}, true);
+      const response = await apiService.post('/Course', courseData, {}, true);
 
       if (response.isSuccess) {
         toast.success('Tạo khóa học thành công!');
@@ -413,7 +441,7 @@ const CourseAddNewEnhanced = () => {
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={() => benefitsArray.append({ value: '' })}
+                      onClick={() => benefitsArray.append({ description: '' })}
                     >
                       <Plus className="h-4 w-4 mr-2" /> Thêm lợi ích
                     </Button>
@@ -423,7 +451,7 @@ const CourseAddNewEnhanced = () => {
                     <div key={field.id} className="flex items-center gap-2">
                       <FormField
                         control={form.control}
-                        name={`benefits.${index}.value`}
+                        name={`benefits.${index}.description`}
                         render={({ field }) => (
                           <FormItem className="flex-1">
                             <FormControl>
@@ -459,7 +487,7 @@ const CourseAddNewEnhanced = () => {
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={() => technologiesArray.append({ name: '', description: '' })}
+                      onClick={() => technologiesArray.append({ technologyId: '', name: '' })}
                     >
                       <Plus className="h-4 w-4 mr-2" /> Thêm công nghệ
                     </Button>
@@ -497,16 +525,12 @@ const CourseAddNewEnhanced = () => {
                         
                         <FormField
                           control={form.control}
-                          name={`technologies.${index}.description`}
+                          name={`technologies.${index}.technologyId`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Mô tả (Tùy chọn)</FormLabel>
+                              <FormLabel>ID công nghệ</FormLabel>
                               <FormControl>
-                                <Textarea 
-                                  placeholder="Mô tả ngắn về công nghệ này..." 
-                                  className="resize-y"
-                                  {...field} 
-                                />
+                                <Input placeholder="ID công nghệ..." {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -530,7 +554,7 @@ const CourseAddNewEnhanced = () => {
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={() => categoriesArray.append({ name: '' })}
+                      onClick={() => categoriesArray.append({ categoryId: '', name: '' })}
                     >
                       <Plus className="h-4 w-4 mr-2" /> Thêm danh mục
                     </Button>
@@ -546,6 +570,19 @@ const CourseAddNewEnhanced = () => {
                             <FormItem className="flex-1">
                               <FormControl>
                                 <Input placeholder="Tên danh mục..." {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`categories.${index}.categoryId`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>ID danh mục</FormLabel>
+                              <FormControl>
+                                <Input placeholder="ID danh mục..." {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -589,7 +626,7 @@ const CourseAddNewEnhanced = () => {
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={() => requirementsArray.append({ value: '' })}
+                      onClick={() => requirementsArray.append({ description: '' })}
                     >
                       <Plus className="h-4 w-4 mr-2" /> Thêm yêu cầu
                     </Button>
@@ -599,7 +636,7 @@ const CourseAddNewEnhanced = () => {
                     <div key={field.id} className="flex items-center gap-2">
                       <FormField
                         control={form.control}
-                        name={`requirements.${index}.value`}
+                        name={`requirements.${index}.description`}
                         render={({ field }) => (
                           <FormItem className="flex-1">
                             <FormControl>
@@ -659,7 +696,7 @@ const CourseAddNewEnhanced = () => {
                         
                         <FormField
                           control={form.control}
-                          name={`qa.${index}.question`}
+                          name={`qAs.${index}.question`}
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Câu hỏi</FormLabel>
@@ -673,7 +710,7 @@ const CourseAddNewEnhanced = () => {
                         
                         <FormField
                           control={form.control}
-                          name={`qa.${index}.answer`}
+                          name={`qAs.${index}.answer`}
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Câu trả lời</FormLabel>
@@ -706,7 +743,7 @@ const CourseAddNewEnhanced = () => {
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={() => sectionsArray.append({ title: '', lessons: [{ title: '', videoUrl: '', content: '', durationTime: 0 }] })}
+                      onClick={() => sectionsArray.append({ name: '', lessons: [{ title: '', description: '', duration: 0, videoUrl: '', attachmentUrl: '' }] })}
                     >
                       <Plus className="h-4 w-4 mr-2" /> Thêm chương
                     </Button>
@@ -737,7 +774,7 @@ const CourseAddNewEnhanced = () => {
                           
                           <FormField
                             control={form.control}
-                            name={`sections.${sectionIndex}.title`}
+                            name={`sections.${sectionIndex}.name`}
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel>Tên chương</FormLabel>
@@ -756,7 +793,7 @@ const CourseAddNewEnhanced = () => {
                                 type="button"
                                 variant="outline"
                                 size="sm"
-                                onClick={() => lessonsArray.append({ title: '', videoUrl: '', content: '', durationTime: 0 })}
+                                onClick={() => lessonsArray.append({ title: '', description: '', duration: 0, videoUrl: '', attachmentUrl: '' })}
                               >
                                 <Plus className="h-4 w-4 mr-2" /> Thêm bài học
                               </Button>
@@ -794,6 +831,38 @@ const CourseAddNewEnhanced = () => {
                                   
                                   <FormField
                                     control={form.control}
+                                    name={`sections.${sectionIndex}.lessons.${lessonIndex}.description`}
+                                    render={({ field }) => (
+                                      <FormItem>
+                                        <FormLabel>Mô tả bài học</FormLabel>
+                                        <FormControl>
+                                          <Textarea
+                                            placeholder="Nhập mô tả ngắn về bài học..."
+                                            className="resize-y"
+                                            {...field}
+                                          />
+                                        </FormControl>
+                                        <FormMessage />
+                                      </FormItem>
+                                    )}
+                                  />
+                                  
+                                  <FormField
+                                    control={form.control}
+                                    name={`sections.${sectionIndex}.lessons.${lessonIndex}.duration`}
+                                    render={({ field }) => (
+                                      <FormItem>
+                                        <FormLabel>Thời lượng (phút)</FormLabel>
+                                        <FormControl>
+                                          <Input type="number" min="0" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                      </FormItem>
+                                    )}
+                                  />
+                                  
+                                  <FormField
+                                    control={form.control}
                                     name={`sections.${sectionIndex}.lessons.${lessonIndex}.videoUrl`}
                                     render={({ field }) => (
                                       <FormItem>
@@ -808,30 +877,12 @@ const CourseAddNewEnhanced = () => {
                                   
                                   <FormField
                                     control={form.control}
-                                    name={`sections.${sectionIndex}.lessons.${lessonIndex}.content`}
+                                    name={`sections.${sectionIndex}.lessons.${lessonIndex}.attachmentUrl`}
                                     render={({ field }) => (
                                       <FormItem>
-                                        <FormLabel>Nội dung bài học</FormLabel>
+                                        <FormLabel>URL tài liệu đính kèm (nếu có)</FormLabel>
                                         <FormControl>
-                                          <Textarea
-                                            placeholder="Nhập nội dung bài học..."
-                                            className="resize-y min-h-[100px]"
-                                            {...field}
-                                          />
-                                        </FormControl>
-                                        <FormMessage />
-                                      </FormItem>
-                                    )}
-                                  />
-                                  
-                                  <FormField
-                                    control={form.control}
-                                    name={`sections.${sectionIndex}.lessons.${lessonIndex}.durationTime`}
-                                    render={({ field }) => (
-                                      <FormItem>
-                                        <FormLabel>Thời lượng (phút)</FormLabel>
-                                        <FormControl>
-                                          <Input type="number" min="0" {...field} />
+                                          <Input type="url" placeholder="https://example.com/attachment.pdf" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                       </FormItem>

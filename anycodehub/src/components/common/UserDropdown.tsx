@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
-import { LogOut, User, Settings, Crown } from "lucide-react"
+import { LogOut, User, Settings, Crown, Lock } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useAuthStore } from "@/stores/auth.store"
 import { useMemo } from "react"
@@ -54,6 +54,10 @@ const UserDropdown = () => {
         <DropdownMenuItem onClick={handleProfile} className="cursor-pointer">
           <User className="mr-2 h-4 w-4" />
           <span>Profile</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push("/account/change-password")} className="cursor-pointer">
+          <Lock className="mr-2 h-4 w-4" />
+          <span>Đổi mật khẩu</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => router.push("/settings")} className="cursor-pointer">
           <Settings className="mr-2 h-4 w-4" />

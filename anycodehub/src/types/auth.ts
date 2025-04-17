@@ -8,6 +8,8 @@ export interface User {
     createdAt: string;
     updatedAt: string;
     roles: string[];
+    authProvider?: string; // 'google', 'local', etc.
+    hasPassword?: boolean; // Whether the user has set a password
 }
 
 export interface ApiError {
