@@ -1,9 +1,14 @@
-import Heading from "@/components/typoraphy/heading"
+'use client';
 
-const ManageCourse = () => {
-    return (
-        <Heading>Quản lý khoá học</Heading>
-    )
-}
+import { useEffect } from 'react';
+import { redirect } from 'next/navigation';
 
-export default ManageCourse
+const ManageCoursePage = () => {
+  useEffect(() => {
+    redirect('/admin/course');
+  }, []);
+
+  return null;
+};
+
+export default ManageCoursePage;

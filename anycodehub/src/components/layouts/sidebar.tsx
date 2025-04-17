@@ -5,9 +5,7 @@ import MenuItem from "../menuItems";
 import logo from "../../../public/images/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect, useMemo } from "react";
-import { ChevronLeft, ChevronRight, LogOut, User as UserIcon, Settings } from "lucide-react";
-import { useAuthStore } from "@/stores/auth.store";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface SidebarProps {
     isCollapsed: boolean;
@@ -15,16 +13,6 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const getUser = useAuthStore((state) => state.getUser);
-    const user = useMemo(() => getUser(), [getUser]);
-
-    const handleLogout = async () => {
-        await useAuthStore.getState().clearAuth();
-        setDropdownOpen(false);
-        // Không chuyển hướng đến trang login
-    };
-
     return (
         <>
             {/* Mobile overlay - only visible when sidebar is expanded on mobile */}
@@ -65,7 +53,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar }: SidebarProps) => {
 
                 <div className={`${isCollapsed ? "overflow-visible" : "overflow-y-auto"} flex-grow px-3 pb-5 pt-3`}>
                     <ul className="flex flex-col gap-2"> 
-                        {menuItems.filter(t => !(t.authorized && !user)).map((item, index) => {
+                        {menuItems.map((item, index) => {
                             return <MenuItem
                                 key={index}
                                 icon={item.icon}

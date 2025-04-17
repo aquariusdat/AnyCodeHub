@@ -1,9 +1,15 @@
+'use client';
+
+import { useEffect } from 'react';
+import { redirect } from 'next/navigation';
 import Heading from "@/components/typoraphy/heading"
 
-const ManageOrder = () => {
-    return (
-        <Heading>Quản lý đơn hàng</Heading>
-    )
-}
+const ManageOrderPage = () => {
+  useEffect(() => {
+    redirect('/admin/order');
+  }, []);
 
-export default ManageOrder
+  return null;
+};
+
+export default ManageOrderPage

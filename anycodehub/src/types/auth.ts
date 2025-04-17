@@ -7,6 +7,7 @@ export interface User {
     birthOfDate: string;
     createdAt: string;
     updatedAt: string;
+    roles: string[];
 }
 
 export interface ApiError {

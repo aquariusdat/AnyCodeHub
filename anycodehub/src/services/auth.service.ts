@@ -13,7 +13,8 @@ export const authService = {
         
         // If login is successful, update auth store
         if (response.isSuccess) {
-            await useAuthStore.getState().setAuth(response as LoginResponse);
+            console.log(`login successfully`);
+            await useAuthStore.getState().setAuth();
         }
         
         return response as LoginResponse;

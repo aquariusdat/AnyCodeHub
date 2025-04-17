@@ -1,9 +1,15 @@
+'use client';
+
+import { useEffect } from 'react';
+import { redirect } from 'next/navigation';
 import Heading from "@/components/typoraphy/heading"
 
-const ManageComment = () => {
-    return (
-        <Heading>Quản lý bình luận</Heading>
-    )
-}
+const ManageCommentPage = () => {
+  useEffect(() => {
+    redirect('/admin/comment');
+  }, []);
 
-export default ManageComment
+  return null;
+};
+
+export default ManageCommentPage

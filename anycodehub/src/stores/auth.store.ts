@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { User, LoginResponse } from '@/types/auth';
 import { apiService } from '@/services/api.service';
 import Cookies from 'js-cookie';
+import { EUserRole } from '@/types/enums';
 
 // Tên cookie cho thông tin người dùng
 const USER_COOKIE_NAME = 'X-USER-DATA';
@@ -19,6 +20,7 @@ interface AuthState {
   setAuth: () => Promise<void>;
   clearAuth: () => Promise<void>;
   getUser: () => User | null;
+  isAdmin: () => boolean;
 }
 
 // Tạo store với zustand và middleware persist để lưu trạng thái
@@ -29,7 +31,7 @@ export const useAuthStore = create<AuthState>()(
       user: null,
 
       // Getter function
-      isAuthenticated: () => !!Cookies.get(USER_COOKIE_NAME),
+      isAuthenticated: () => !!get().user,
 
       // Action để set thông tin auth khi đăng nhập
       setAuth: async () => {
@@ -59,9 +61,11 @@ export const useAuthStore = create<AuthState>()(
       // Getter để lấy thông tin user
       getUser: () => {
         console.log(`getUser:: ${Cookies.get(USER_COOKIE_NAME)}`);
+        debugger;
         if (!!!Cookies.get(USER_COOKIE_NAME)) {
-          set({ user: null });
-          return null;
+          (async () => {
+            await apiService.refreshToken();
+          })();
         }
 
         if (!get().user) {
@@ -72,6 +76,10 @@ export const useAuthStore = create<AuthState>()(
         }
 
         return get().user;
+      },
+
+      isAdmin: () => {
+        return get().user?.roles?.some(role => role === EUserRole.ADMIN) ?? false;
       },
     }),
     {

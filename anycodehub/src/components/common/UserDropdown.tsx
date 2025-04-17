@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
-import { LogOut, User, Settings } from "lucide-react"
+import { LogOut, User, Settings, Crown } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useAuthStore } from "@/stores/auth.store"
 import { useMemo } from "react"
@@ -16,6 +16,7 @@ import { useMemo } from "react"
 const UserDropdown = () => {
   const router = useRouter()
   const getUser = useAuthStore((state) => state.getUser);
+  const isAdmin = useAuthStore((state) => state.isAdmin());
   const user = useMemo(() => getUser(), [getUser]);
   
   // Get initials from user's first and last name
@@ -58,6 +59,13 @@ const UserDropdown = () => {
           <Settings className="mr-2 h-4 w-4" />
           <span>Settings</span>
         </DropdownMenuItem>
+        {
+          isAdmin && 
+            <DropdownMenuItem onClick={() => router.push("/admin/dashboard")} className="cursor-pointer">
+          <Crown className="mr-2 h-4 w-4" />
+          <span>Admin/Dashboard</span>
+        </DropdownMenuItem>
+        }
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-500 focus:text-red-500">
           <LogOut className="mr-2 h-4 w-4" />

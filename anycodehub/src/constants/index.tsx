@@ -17,30 +17,30 @@ export const menuItems: {
             title: "Khu vực học tập",
             icon: <ExploreIcon className="size-5" />
         },
-        {
-            url: "/manage/course",
-            title: "Quản lý khoá học",
-            icon: <ExploreIcon className="size-5" />,
-            authorized: true,
-        },
-        {
-            url: "/manage/member",
-            title: "Quản lý thành viên",
-            icon: <UserIcon className="size-5" />,
-            authorized: true,
-        },
-        {
-            url: "/manage/order",
-            title: "Quản lý đơn hàng",
-            icon: <ShoppingBagIcon className="size-5" />,
-            authorized: true,
-        },
-        {
-            url: "/manage/comment",
-            title: "Quản lý bình luận",
-            icon: <CommentIcon className="size-5" />,
-            authorized: true,
-        },
+        // {
+        //     url: "/manage/course",
+        //     title: "Quản lý khoá học",
+        //     icon: <ExploreIcon className="size-5" />,
+        //     authorized: true,
+        // },
+        // {
+        //     url: "/manage/member",
+        //     title: "Quản lý thành viên",
+        //     icon: <UserIcon className="size-5" />,
+        //     authorized: true,
+        // },
+        // {
+        //     url: "/manage/order",
+        //     title: "Quản lý đơn hàng",
+        //     icon: <ShoppingBagIcon className="size-5" />,
+        //     authorized: true,
+        // },
+        // {
+        //     url: "/manage/comment",
+        //     title: "Quản lý bình luận",
+        //     icon: <CommentIcon className="size-5" />,
+        //     authorized: true,
+        // },
         {
             url: "/blog",
             title: "Blog",

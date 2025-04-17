@@ -1,13 +1,16 @@
+'use client';
+
+import { useEffect } from 'react';
+import { redirect } from 'next/navigation';
 import CourseAddNew from "@/components/course/courseAddNew";
 import Heading from "@/components/typoraphy/heading";
 
 const CreateCoursePage = () => {
-    return (
-        <div className="container mx-auto py-10">
-            <Heading>Tạo khóa học mới</Heading>
-            <CourseAddNew />
-        </div>
-    )
+    useEffect(() => {
+        redirect('/admin/course/create');
+    }, []);
+
+    return null;
 }
 
 export default CreateCoursePage;

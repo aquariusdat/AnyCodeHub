@@ -1,9 +1,14 @@
-import Heading from "@/components/typoraphy/heading"
+'use client';
 
-const ManageMember = () => {
-    return (
-        <Heading>Quản lý học viên</Heading>
-    )
-}
+import { useEffect } from 'react';
+import { redirect } from 'next/navigation';
 
-export default ManageMember
+const ManageMemberPage = () => {
+  useEffect(() => {
+    redirect('/admin/member');
+  }, []);
+
+  return null;
+};
+
+export default ManageMemberPage;

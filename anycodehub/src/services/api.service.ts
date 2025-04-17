@@ -1,5 +1,5 @@
 import { useAuthStore} from '@/stores/auth.store';
-import { ApiResponse } from '../types/auth';
+import { ApiResponse, User } from '../types/auth';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -33,7 +33,7 @@ class ApiService {
     }
 
     // Refresh token method
-    private async refreshToken(): Promise<boolean> {
+    public async refreshToken(): Promise<boolean> {
         try {
             // Return immediately if already refreshing
             if (isRefreshing) {
@@ -44,12 +44,9 @@ class ApiService {
 
             isRefreshing = true;
 
-            const response = await fetch(`${API_BASE_URL}/Auth/Token`, {
-                method: 'POST',
-                credentials: 'include', // Include cookies in the request
-            });
+            const response = await this.post<LoginResponse>('/Auth/Token', {}, {}, true);
 
-            if (!response.ok) {
+            if (!response.isSuccess) {
                 // If refresh token request fails, clear auth and redirect to login
                 useAuthStore.getState().clearAuth();
 
@@ -62,9 +59,9 @@ class ApiService {
                 return false;
             }
 
-            const refreshResponse = await response.json();
-            if (refreshResponse.isSuccess) {
+            if (response.isSuccess) {
                 // Process all queued requests with the new token
+                useAuthStore.getState().setAuth();                
                 processQueue('success');
                 isRefreshing = false;
                 return true;
