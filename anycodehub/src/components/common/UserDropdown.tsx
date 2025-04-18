@@ -32,7 +32,7 @@ const UserDropdown = () => {
   }
   
   const handleProfile = () => {
-    router.push("/profile")
+    router.push("/account/profile")
   }
 
   return (
@@ -53,15 +53,15 @@ const UserDropdown = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleProfile} className="cursor-pointer">
           <User className="mr-2 h-4 w-4" />
-          <span>Profile</span>
+          <span>Hồ sơ cá nhân</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => router.push("/account/change-password")} className="cursor-pointer">
           <Lock className="mr-2 h-4 w-4" />
           <span>Đổi mật khẩu</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => router.push("/settings")} className="cursor-pointer">
+        <DropdownMenuItem onClick={() => router.push("/account/settings")} className="cursor-pointer">
           <Settings className="mr-2 h-4 w-4" />
-          <span>Settings</span>
+          <span>Cài đặt</span>
         </DropdownMenuItem>
         {
           isAdmin && 

@@ -1,32 +1,46 @@
+import "./globals.css";
+import { Manrope } from "next/font/google";
+import { AuthInit } from "@/components/auth/AuthInit";
 import type { Metadata } from "next";
-import "./globals.scss";
-import { manrope } from "@/utils/fonts";
-import { ThemeProvider } from "@/components/common/theme-provider";
+import { cn } from "@/lib/utils";
+import { ThemeProvider } from "./theme-provider";
+import { Toaster } from "@/components/toaster";
+
+const manrope = Manrope({
+	subsets: ["latin", "vietnamese"],
+	variable: "--font-manrope",
+});
 
 export const metadata: Metadata = {
-  title: "AnyCodeHub",
-  description: "Nền tảng học lập trình trực tuyến",
+	title: "AnyCodeHub",
+	description: "AnyCodeHub - Coding Tutorials and Courses",
 };
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <>
-      <html lang="en">
-        <body className={`${manrope.variable} font-primary antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          </ThemeProvider>
-        </body>
-      </html>
-    </>
-  );
+	children,
+}: {
+	children: React.ReactNode;
+}) {
+	return (
+		<html lang="en" suppressHydrationWarning>
+			<body
+				className={cn(
+					"min-h-screen bg-white font-sans antialiased dark:bg-gray-950",
+					manrope.variable
+				)}
+			>
+				<ThemeProvider
+					attribute="class"
+					defaultTheme="system"
+					enableSystem
+					disableTransitionOnChange
+				>
+					<AuthInit>
+						{children}
+						<Toaster />
+					</AuthInit>
+				</ThemeProvider>
+			</body>
+		</html>
+	);
 }

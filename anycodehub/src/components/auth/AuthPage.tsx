@@ -150,9 +150,9 @@ export const AuthPage = () => {
         try {
             setIsLoading(true);
             const response = await apiService.get<string>('/Auth/SignInGoogleOAuth');
-
             if (!response || !response.isSuccess) {
                 toast.error(response.error?.message || "Google authentication failed");
+                setIsLoading(false);
                 return;
             }
 
